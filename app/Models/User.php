@@ -2,84 +2,87 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
+use Orchid\Platform\Models\User as Authenticatable;
+use Orchid\Support\Facades\Dashboard;
 
 /**
  * @property int id
- * @property string login
+ * @property string name
  * @property string email
+ * @property string email_verified_at
  * @property string password
- * @property string role
+ * @property array permissions
+ * @property string remember_token
  * @property string api_token
- * @property Carbon updated_at
- * @property Carbon created_at
  */
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use Notifiable;
-
-    const ROLES = [
-        'admin',    // Админ
-        'master',   // Ведущий
-        'user',     // Обычный пользователь
-    ];
-
-    protected const ROLES_VALUES = [
-        'admin' => 0,       // Админ
-        'master' => 100,    // Ведущий
-        'user' => 1000,     // Обычный пользователь
-    ];
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'login',
+        'name',
         'email',
         'password',
-        'role',
+        'permissions',
+        'api_token',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
         'password',
+        'remember_token',
+        'permissions',
         'api_token',
     ];
 
     /**
-     * @param $role1
-     * @param $role2
-     * @return bool
+     * The attributes that should be cast to native types.
+     *
+     * @var array
      */
-    public static function compareRoles($role1, $role2): bool
-    {
-        return (self::ROLES_VALUES[$role1] >= self::ROLES_VALUES[$role2]);
-    }
+    protected $casts = [
+        'permissions'          => 'array',
+        'email_verified_at'    => 'datetime',
+    ];
 
-    public function checkRole($role): bool
-    {
-        return self::compareRoles($this->role, $role);
-    }
+    /**
+     * The attributes for which you can use filters in url.
+     *
+     * @var array
+     */
+    protected $allowedFilters = [
+        'id',
+        'name',
+        'email',
+        'permissions',
+    ];
 
-    public function regenerateApiToken(bool $save = true): string
-    {
-        $this->api_token = Str::random(60);
+    /**
+     * The attributes for which can use sort in url.
+     *
+     * @var array
+     */
+    protected $allowedSorts = [
+        'id',
+        'name',
+        'email',
+        'updated_at',
+        'created_at',
+    ];
+
+    public function genToken($save = false){
+        $this->api_token = Str::random(80);
         if($save)
             $this->save();
-
-        return $this->api_token;
     }
+
 }

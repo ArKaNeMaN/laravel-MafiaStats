@@ -18,7 +18,7 @@ Route::get('/', function (Request $req) {
 Route::get('/test', function (Request $req) {
     return response()->json(
         User::query()
-        ->where('role', 'admin')
+        ->where('id', '=', 1)
         ->first()
         ->api_token
     );
