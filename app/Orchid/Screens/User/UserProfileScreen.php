@@ -24,14 +24,14 @@ class UserProfileScreen extends Screen
      *
      * @var string
      */
-    public $name = 'My account';
+    public $name = 'Аккаунт';
 
     /**
      * Display header description.
      *
      * @var string
      */
-    public $description = 'Update your account details such as name, email address and password';
+    public $description = 'Изменение данных аккаунта';
 
     /**
      * Query data.
@@ -64,20 +64,19 @@ class UserProfileScreen extends Screen
     {
         return [
             Layout::block(UserEditLayout::class)
-                ->title(__('Profile Information'))
-                ->description(__("Update your account's profile information and email address."))
+                ->title('Информация профиля')
+                ->description('Изменение ифномрации об аккаунте.')
                 ->commands(
-                    Button::make(__('Save'))
+                    Button::make('Сохранить')
                         ->type(Color::DEFAULT())
                         ->icon('check')
                         ->method('save')
                 ),
 
             Layout::block(ProfilePasswordLayout::class)
-                ->title(__('Update Password'))
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
+                ->title('Изменить пароль')
                 ->commands(
-                    Button::make(__('Update password'))
+                    Button::make('Изменить пароль')
                         ->type(Color::DEFAULT())
                         ->icon('check')
                         ->method('changePassword')
@@ -102,7 +101,7 @@ class UserProfileScreen extends Screen
             ->fill($request->get('user'))
             ->save();
 
-        Toast::info(__('Profile updated.'));
+        Toast::info('Профиль изменён');
     }
 
     /**
@@ -119,6 +118,6 @@ class UserProfileScreen extends Screen
             $user->password = Hash::make($request->get('password'));
         })->save();
 
-        Toast::info(__('Password changed.'));
+        Toast::info('Пароль изменён');
     }
 }

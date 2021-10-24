@@ -16,7 +16,7 @@ class UserPresenter extends Presenter implements Searchable, Personable
      */
     public function label(): string
     {
-        return 'Users';
+        return 'Пользователи';
     }
 
     /**
@@ -35,7 +35,7 @@ class UserPresenter extends Presenter implements Searchable, Personable
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
         return empty($roles)
-            ? __('Regular user')
+            ? 'Пользователь'
             : $roles;
     }
 

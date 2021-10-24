@@ -85,7 +85,7 @@ class UserEditScreen extends Screen
 
             Button::make('Удалить')
                 ->icon('trash')
-                ->confirm(__('При удалении аккаунта, также удаляется вся информация о нём. При необходимости, предварительно сохраните всю нужную информацию.'))
+                ->confirm('При удалении аккаунта, также удаляется вся информация о нём. При необходимости, предварительно сохраните всю нужную информацию.')
                 ->method('remove')
                 ->canSee($this->user->exists),
 
@@ -114,7 +114,6 @@ class UserEditScreen extends Screen
 
             Layout::block(UserPasswordLayout::class)
                 ->title('Пароль')
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(
                     Button::make('Сохранить')
                         ->type(Color::DEFAULT())
@@ -131,12 +130,13 @@ class UserEditScreen extends Screen
                     Button::make('(Пере)создать')
                         ->type(Color::DEFAULT())
                         ->icon('reload')
+                        ->confirm('ВНИМАНИЕ! Авторизация во всех сторонних приложениях будет сброшена.')
                         ->method('genToken')
                 ),
 
             Layout::block(UserRoleLayout::class)
                 ->title('Роли')
-                ->description(__('A Role defines a set of tasks a user assigned the role is allowed to perform.'))
+                ->description('Роли пользователя, определяющие его права')
                 ->commands(
                     Button::make('Сохранить')
                         ->type(Color::DEFAULT())
@@ -147,7 +147,7 @@ class UserEditScreen extends Screen
 
             Layout::block(RolePermissionLayout::class)
                 ->title('Права')
-                ->description(__('Allow the user to perform some actions that are not provided for by his roles'))
+                ->description('Персональные права пользователя, позволяющие выполнять действия, не подразвумеваемые ролями')
                 ->commands(
                     Button::make('Сохранить')
                         ->type(Color::DEFAULT())
