@@ -24,14 +24,18 @@ use Tabuna\Breadcrumbs\Trail;
 
 // Main
 Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main');
+    ->name('platform.main')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail
+            ->push('Главная', route('platform.main'));
+    });
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->parent('platform.index')
+            ->parent('platform.main')
             ->push('Профиль', route('platform.profile'));
     });
 
@@ -58,7 +62,7 @@ Route::screen('users', UserListScreen::class)
     ->name('platform.systems.users')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->parent('platform.index')
+            ->parent('platform.main')
             ->push('Пользователи', route('platform.systems.users'));
     });
 
@@ -85,6 +89,6 @@ Route::screen('roles', RoleListScreen::class)
     ->name('platform.systems.roles')
     ->breadcrumbs(function (Trail $trail) {
         return $trail
-            ->parent('platform.index')
+            ->parent('platform.main')
             ->push('Роли', route('platform.systems.roles'));
     });
