@@ -119,10 +119,38 @@ class User extends Authenticatable
         'created_at',
     ];
 
+    public static function makeToken(){
+        return Str::random(80);
+    }
+
     public function genToken($save = false){
-        $this->api_token = Str::random(80);
+        $this->api_token = static::makeToken();
         if($save)
             $this->save();
+    }
+
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     *
+     * @throws Throwable
+     */
+    public static function createAdmin(string $name, string $email, string $password)
+    {
+        throw_if(static::where('email', $email)->exists(), 'User exist');
+
+        static::create([
+            'name'          => $name,
+            'email'         => $email,
+            'password'      => Hash::make($password),
+            'permissions'   => Dashboard::getAllowAllPermission(),
+            'api_token'     => static::makeToken(),
+        ]);
+    }
+
+    public function getHasTokenAttribute(){
+        return !empty($this->api_token);
     }
 
 }

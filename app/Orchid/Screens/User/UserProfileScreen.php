@@ -6,6 +6,7 @@ namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
+use App\Orchid\Layouts\User\UserTokenLayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -33,6 +34,8 @@ class UserProfileScreen extends Screen
      */
     public $description = 'Изменение данных аккаунта';
 
+
+    protected User|\App\Models\User|null $user = null;
     /**
      * Query data.
      *
@@ -42,8 +45,10 @@ class UserProfileScreen extends Screen
      */
     public function query(Request $request): array
     {
+        $this->user = $request->user();
+
         return [
-            'user' => $request->user(),
+            'user' => $this->user,
         ];
     }
 
@@ -71,6 +76,17 @@ class UserProfileScreen extends Screen
                         ->type(Color::DEFAULT())
                         ->icon('check')
                         ->method('save')
+                ),
+
+            Layout::block(UserTokenLayout::class)
+                ->title('API Токен')
+                ->description('Токен для авторизации в сторонних приложениях')
+                ->commands(
+                    Button::make('(Пере)создать')
+                        ->type(Color::DEFAULT())
+                        ->icon('reload')
+                        ->confirm($this->user->has_token ? 'ВНИМАНИЕ!<br>Авторизация во всех сторонних приложениях будет сброшена.' : false)
+                        ->method('genToken')
                 ),
 
             Layout::block(ProfilePasswordLayout::class)
@@ -119,5 +135,9 @@ class UserProfileScreen extends Screen
         })->save();
 
         Toast::info('Пароль изменён');
+    }
+
+    public function genToken(Request $req){
+        $req->user()->genToken(true);
     }
 }
