@@ -2,9 +2,57 @@
 
 namespace App\Models;
 
+use Database\Factories\GamePlayerFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\GamePlayer
+ *
+ * @property int $id
+ * @property int $game_id
+ * @property int $player_id
+ * @property int|null $helper_id
+ * @property int $ingame_player_id
+ * @property string $role
+ * @property int $fouls
+ * @property int $is_removed
+ * @property float $score
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|GameNight[] $checked_don
+ * @property-read int|null $checked_don_count
+ * @property-read Collection|GameNight[] $checked_seriff
+ * @property-read int|null $checked_seriff_count
+ * @property-read Game $game
+ * @property-read Collection|GameNight[] $killed
+ * @property-read int|null $killed_count
+ * @property-read Player $player
+ * @property-read Collection|GameVoting[] $nominated
+ * @property-read int|null $nominated_count
+ * @property-read Collection|GameVoting[] $nominates
+ * @property-read int|null $nominates_count
+ * @method static GamePlayerFactory factory(...$parameters)
+ * @method static Builder|GamePlayer newModelQuery()
+ * @method static Builder|GamePlayer newQuery()
+ * @method static Builder|GamePlayer query()
+ * @method static Builder|GamePlayer whereCreatedAt($value)
+ * @method static Builder|GamePlayer whereFouls($value)
+ * @method static Builder|GamePlayer whereGameId($value)
+ * @method static Builder|GamePlayer whereHelperId($value)
+ * @method static Builder|GamePlayer whereId($value)
+ * @method static Builder|GamePlayer whereIngamePlayerId($value)
+ * @method static Builder|GamePlayer whereIsRemoved($value)
+ * @method static Builder|GamePlayer wherePlayerId($value)
+ * @method static Builder|GamePlayer whereRole($value)
+ * @method static Builder|GamePlayer whereScore($value)
+ * @method static Builder|GamePlayer whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class GamePlayer extends Model
 {
     use HasFactory;
@@ -34,23 +82,23 @@ class GamePlayer extends Model
 
     public function game()
     {
-        return $this->belongsTo(\App\Models\Game::class, 'game_id');
+        return $this->belongsTo(Game::class, 'game_id');
     }
 
     public function player()
     {
-        return $this->belongsTo(\App\Models\Player::class, 'player_id');
+        return $this->belongsTo(Player::class, 'player_id');
     }
 
 
     public function nominates()
     {
-        return $this->hasMany('\App\Models\GameVote', 'nominator_id');
+        return $this->hasMany('\App\Models\GameVoting', 'nominator_id');
     }
 
     public function nominated()
     {
-        return $this->hasMany('\App\Models\GameVote', 'game_player_id');
+        return $this->hasMany('\App\Models\GameVoting', 'game_player_id');
     }
 
     public function killed()
@@ -70,6 +118,6 @@ class GamePlayer extends Model
 
     public function isWinner()
     {
-        return $this->game()->result == self::ROLES_TEAMS[$this->role];
+        return $this->game->result == self::ROLES_TEAMS[$this->role];
     }
 }
