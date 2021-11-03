@@ -24,14 +24,14 @@ class PlayerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['string', 'required', 'max:64'],
-            'nickname' => ['string', 'required', 'max:64'],
-            'birthday' => ['nullable', 'date'],
+            'player.name' => ['string', 'required', 'max:64'],
+            'player.nickname' => ['string', 'required', 'max:64'],
+            'player.birthday' => ['nullable', 'date'],
         ];
     }
 
     public function getData(): array
     {
-        return $this->only(['name', 'nickname', 'birthday']);
+        return $this->validated()['player'];
     }
 }

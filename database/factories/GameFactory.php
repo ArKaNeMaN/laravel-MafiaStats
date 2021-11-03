@@ -26,11 +26,16 @@ class GameFactory extends Factory
     public function definition()
     {
         return [
-            'tournament_id' => random_int(0, 1) ? Tournament::inRandomOrder()->first()->id : null,
-            'leader_id' => Player::inRandomOrder()->first()->id,
-            'result' => $this->faker->randomElement(Game::RESULTS),
-            'date_time' => $this->faker->dateTime(),
-            'played' => (bool) random_int(0, 1),
+            'tournament_id' => $this->faker->boolean()
+                ? Tournament::inRandomOrder()
+                    ->first()->id
+                : null,
+
+            'leader_id' => Player::inRandomOrder()
+                ->first()->id,
+
+            'result' => $this->faker->randomElement(array_merge(Game::RESULTS, [null])),
+            'date' => $this->faker->dateTime(),
         ];
     }
 

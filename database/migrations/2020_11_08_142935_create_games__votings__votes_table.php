@@ -16,19 +16,19 @@ class CreateGamesVotingsVotesTable extends Migration
         Schema::create('games__votings__votes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('voting_id');
-            $table->foreign('voting_id')->references('id')->on('games__votings');
+            $table->foreignId('voting_id')
+                ->constrained('games__votings')->cascadeOnDelete();
 
-            $table->foreignId('game_player_id');
-            $table->foreign('game_player_id')->references('id')->on('games__players');
+            $table->foreignId('game_player_id')
+                ->constrained('games__players')->onDelete('SET NULL');
 
-            $table->foreignId('voted_id');
-            $table->foreign('voted_id')->references('id')->on('games__votings__players');
+            $table->foreignId('voted_id')
+                ->constrained('games__players')->onDelete('SET NULL');
 
             $table->boolean('for_accident')->default(false);
 
             $table->unique(['voting_id', 'game_player_id', 'for_accident'], 'unique_vote_for_player');
-            
+
             $table->timestamps();
         });
     }

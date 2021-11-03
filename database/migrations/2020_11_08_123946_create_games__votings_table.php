@@ -16,11 +16,12 @@ class CreateGamesVotingsTable extends Migration
         Schema::create('games__votings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('game_id');
-            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreignId('game_id')
+                ->constrained('games')->cascadeOnDelete();
 
             $table->integer('ingame_id');
-            $table->integer('votes_for_both')->default(0);
+            $table->integer('votes_for_both')
+                ->default(0);
 
             $table->timestamps();
         });

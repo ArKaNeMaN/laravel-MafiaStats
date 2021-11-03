@@ -2,7 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Models\Game;
+use App\Models\Player;
+use App\Orchid\Screens\Games\GamesListScreen;
+use App\Orchid\Screens\Games\GameViewScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Players\PlayerEditScreen;
+use App\Orchid\Screens\Players\PlayersListScreen;
+use App\Orchid\Screens\Players\PlayerViewScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -92,3 +99,67 @@ Route::screen('roles', RoleListScreen::class)
             ->parent('platform.main')
             ->push('Роли', route('platform.systems.roles'));
     });
+
+// Mafia
+
+Route::group(['prefix' => 'mafia'], function() {
+
+    // Players
+    Route::screen('players/{player}/edit', PlayerEditScreen::class)
+        ->name('app.mafia.players.edit')
+        ->breadcrumbs(function (Trail $trail, Player $player) {
+            return $trail
+                ->parent('app.mafia.players.view', $player)
+                ->push('Редактирование', route('app.mafia.players.edit', $player));
+        });
+
+    Route::screen('players/{player}', PlayerViewScreen::class)
+        ->name('app.mafia.players.view')
+        ->breadcrumbs(function (Trail $trail, Player $player) {
+            return $trail
+                ->parent('app.mafia.players')
+                ->push($player->nickname, route('app.mafia.players.view', $player));
+        });
+
+    Route::screen('players/create', PlayerEditScreen::class)
+        ->name('app.mafia.players.create')
+        ->breadcrumbs(function (Trail $trail) {
+            return $trail
+                ->parent('app.mafia.players')
+                ->push('Создание', route('app.mafia.players.create'));
+        });
+
+    Route::screen('players', PlayersListScreen::class)
+        ->name('app.mafia.players')
+        ->breadcrumbs(function (Trail $trail) {
+            return $trail
+                ->parent('platform.main')
+                ->push('Игроки', route('app.mafia.players'));
+        });
+
+    // Games
+
+    Route::screen('games/{game}/edit', GameViewScreen::class)
+        ->name('app.mafia.games.edit')
+        ->breadcrumbs(function (Trail $trail, Game $game) {
+            return $trail
+                ->parent('app.mafia.games.view', $game)
+                ->push("Редактирование", route('app.mafia.games.edit', $game));
+        });
+
+    Route::screen('games/{game}', GameViewScreen::class)
+        ->name('app.mafia.games.view')
+        ->breadcrumbs(function (Trail $trail, Game $game) {
+            return $trail
+                ->parent('app.mafia.games')
+                ->push("#{$game->id}", route('app.mafia.games.view', $game));
+        });
+
+    Route::screen('games', GamesListScreen::class)
+        ->name('app.mafia.games')
+        ->breadcrumbs(function (Trail $trail) {
+            return $trail
+                ->parent('platform.main')
+                ->push('Игры', route('app.mafia.games'));
+        });
+});

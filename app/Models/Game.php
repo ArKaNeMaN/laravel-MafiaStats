@@ -4,12 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
 class Game extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable, AsSource;
 
     const RESULTS = ['black_win', 'red_win'];
+    const RESULT_TITLES = [
+        null => '-',
+        'black_win' => 'Победа мафии',
+        'red_win' => 'Победа мирных',
+    ];
 
     /**
      * The table associated with the model.
@@ -19,11 +27,53 @@ class Game extends Model
     protected $table = 'games';
 
     /**
-     * The attributes that aren't mass assignable.
-     *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'date',
+        'nickname',
+        'birthday',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    /**
+     * @var array
+     */
+    protected array $allowedFilters = [
+        'id',
+        'date',
+        'nickname',
+        'birthday',
+        'created_at',
+    ];
+
+    /**
+     * @var array
+     */
+    protected array $allowedSorts = [
+        'id',
+        'name',
+        'tournament',
+        'birthday',
+        'created_at',
+    ];
+
+    // Scopes
+
+    public function scopeFinished($query, bool $finished = true, string $boolean = 'and'){
+        return $query->whereNull('result', $finished, $boolean);
+    }
+
+    public function scopeResult(Builder $query, string $result, string $boolean = 'and'){
+        return $query->where('result', 'like', $result, $boolean);
+    }
+
+    // Relations
 
     public function tournament()
     {
@@ -36,6 +86,14 @@ class Game extends Model
     }
 
     public function players()
+    {
+        return $this->belongsToMany(
+            Player::class, GamePlayer::class,
+            'game_id', 'player_id'
+        );
+    }
+
+    public function gamePlayers()
     {
         return $this->hasMany(GamePlayer::class, 'game_id');
     }
@@ -58,17 +116,5 @@ class Game extends Model
     public function bestBlack()
     {
         return $this->belongsTo(Player::class, 'best_black_id');
-    }
-
-    public function getFDateAttribute(){
-        return date('d.m.Y', strtotime($this->date_time));
-    }
-
-    public function getFTimeAttribute(){
-        return date('H:i', strtotime($this->date_time));
-    }
-
-    public function getFDateTimeAttribute(){
-        return date('d.m.Y - H:i', strtotime($this->date_time));
     }
 }

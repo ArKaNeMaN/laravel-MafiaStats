@@ -16,19 +16,19 @@ class CreateGamesNightsTable extends Migration
         Schema::create('games__nights', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('game_id');
-            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreignId('game_id')
+                ->constrained('games')->cascadeOnDelete();
 
             $table->integer('ingame_id');
 
-            $table->foreignId('killed_id')->nullable();
-            $table->foreign('killed_id')->references('id')->on('games__players');
+            $table->foreignId('killed_id')->nullable()
+                ->constrained('games__players')->onDelete('SET NULL');
 
-            $table->foreignId('checked_don_id')->nullable();
-            $table->foreign('checked_don_id')->references('id')->on('games__players');
+            $table->foreignId('checked_don_id')->nullable()
+                ->constrained('games__players')->onDelete('SET NULL');
 
-            $table->foreignId('checked_sheriff_id')->nullable();
-            $table->foreign('checked_sheriff_id')->references('id')->on('games__players');
+            $table->foreignId('checked_sheriff_id')->nullable()
+                ->constrained('games__players')->onDelete('SET NULL');
 
             $table->timestamps();
         });

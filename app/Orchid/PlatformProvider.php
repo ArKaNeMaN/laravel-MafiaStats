@@ -26,6 +26,22 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+
+            // Мафия
+
+            Menu::make('Игроки')
+                ->icon('user')
+                ->route('app.mafia.players')
+                ->permission('app.mafia.players')
+                ->title('Мафия'),
+
+            Menu::make('Игры')
+                ->icon('game-controller')
+                ->route('app.mafia.games')
+                ->permission('app.mafia.games'),
+
+            // Системные
+
             Menu::make('Пользователи')
                 ->icon('user')
                 ->route('platform.systems.users')
@@ -62,8 +78,8 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.users', 'Пользователи'),
 
             ItemPermission::group('Мафия')
-                ->addPermission('app.mafia.games.create', 'Создание игр')
-                ->addPermission('app.mafia.games.master', 'Ведение игр'),
+                ->addPermission('app.mafia.players', 'Управление игроками')
+                ->addPermission('app.mafia.games', 'Управление играми'),
         ];
     }
 }

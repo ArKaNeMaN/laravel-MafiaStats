@@ -24,9 +24,9 @@ class PlayerFactory extends Factory
     public function definition()
     {
         return [
-            'nickname' => Str::random(10),
-            'name' => $this->faker->name,
-            'birthday' => $this->faker->date($format = 'Y-m-d', $max = Carbon::now()),
+            'nickname' => $this->faker->userName(),
+            'name' => $this->faker->name(),
+            'birthday' => $this->faker->date(),
         ];
     }
 }

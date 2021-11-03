@@ -16,14 +16,14 @@ class CreateGamesVotingsPlayersTable extends Migration
         Schema::create('games__votings__players', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('voting_id');
-            $table->foreign('voting_id')->references('id')->on('games__votings');
+            $table->foreignId('voting_id')
+                ->constrained('games__votings')->cascadeOnDelete();
 
-            $table->foreignId('game_player_id');
-            $table->foreign('game_player_id')->references('id')->on('games__players');
+            $table->foreignId('game_player_id')
+                ->constrained('games__players')->onDelete('SET NULL');
 
-            $table->foreignId('nominator_id');
-            $table->foreign('nominator_id')->references('id')->on('games__players');
+            $table->foreignId('nominator_id')
+                ->constrained('games__players')->onDelete('SET NULL');
 
             $table->boolean('is_accident')->default(false);
             $table->boolean('is_kicked')->default(false);

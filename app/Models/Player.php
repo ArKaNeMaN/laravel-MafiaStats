@@ -9,7 +9,7 @@ use Orchid\Screen\AsSource;
 
 class Player extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable, AsSource;
 
     /**
      * @var string
@@ -25,6 +25,33 @@ class Player extends Model
         'birthday',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    /**
+     * @var array
+     */
+    protected array $allowedFilters = [
+        'id',
+        'name',
+        'nickname',
+        'birthday',
+        'created_at',
+    ];
+
+    /**
+     * @var array
+     */
+    protected array $allowedSorts = [
+        'id',
+        'name',
+        'nickname',
+        'birthday',
+        'created_at',
+    ];
+
     public function getLatestGame()
     {
         return $this->gamesPlayers()->latest()->first()->game()->first();
@@ -37,15 +64,13 @@ class Player extends Model
 
     public function games()
     {
-        $gamesPlayers = $this->gamesPlayers()->get();
-        $games = [];
-        foreach($gamesPlayers as $v)
-            $games[] = $v->game()->first();
-        return $games;
+        return $this->belongsToMany(
+            Game::class, GamePlayer::class,
+            'player_id', 'game_id'
+        );
     }
 
-    public function getGamesAttribute(): array
-    {
-        return $this->games();
+    public function leadingGames(){
+        return $this->hasMany(Game::class, 'leader_id');
     }
 }
