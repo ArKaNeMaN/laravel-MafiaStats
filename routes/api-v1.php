@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function (Request $req) {
     return [
         'app_name' => config('app.name'),
+        'debug' => config('app.debug'),
         'api_version' => 1,
     ];
 });
@@ -19,27 +20,33 @@ Route::get('/test', function (Request $req) {
     return response()->json(
         User::query()
         ->where('id', '=', 1)
-        ->first()
+        ->first('api_token')
         ->api_token
     );
 });
 
-Route::any('/players/search', [PlayersController::class, 'search']);
-Route::get('/players', [PlayersController::class, 'list']);
-Route::get('/player/{player}', [PlayersController::class, 'get']);
-Route::get('/player/{player}/games', [PlayersController::class, 'getGames']);
-Route::get('/player/{player}/gPlayers', [PlayersController::class, 'getGPlayers']);
+Route::group(['as' => 'players.', 'prefix' => 'players'], function() {
+    Route::get('/', [PlayersController::class, 'list']);
+    Route::any('search', [PlayersController::class, 'search']);
+    Route::get('{player}', [PlayersController::class, 'get']);
+    Route::get('{player}/games', [PlayersController::class, 'getGames']);
+    Route::get('{player}/gPlayers', [PlayersController::class, 'getGPlayers']);
 
-Route::get('/games', [GamesController::class, 'list']);
-Route::get('/game/{game}', [GamesController::class, 'get']);
-Route::get('/game/{game}/players', [GamesController::class, 'getGPlayers']);
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/', [PlayersController::class, 'create']);
+        Route::put('/{player}', [PlayersController::class, 'update']);
+        Route::delete('/{player}', [PlayersController::class, 'delete']);
+    });
+});
+
+Route::group(['as' => 'games.', 'prefix' => 'games'], function() {
+    Route::get('/', [GamesController::class, 'list']);
+    Route::get('/{game}', [GamesController::class, 'get']);
+    Route::get('/{game}/players', [GamesController::class, 'getGPlayers']);
+});
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    Route::post('/player', [PlayersController::class, 'create']);
-    Route::put('/player/{player}', [PlayersController::class, 'update']);
-    Route::delete('/player/{player}', [PlayersController::class, 'delete']);
 });
