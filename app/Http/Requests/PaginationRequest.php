@@ -50,6 +50,7 @@ class PaginationRequest extends FormRequest
     }
 
     private function qPaginate($q, $cols = ['*']){
-        return $q->paginate($this->perPage, $cols, self::PAGE_INPUT_KEY, $this->page);
+        return $q->paginate($this->perPage, $cols, self::PAGE_INPUT_KEY, $this->page)
+            ->appends($this->query());
     }
 }

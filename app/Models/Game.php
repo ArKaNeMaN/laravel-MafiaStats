@@ -12,7 +12,7 @@ class Game extends Model
 {
     use HasFactory, Filterable, AsSource;
 
-    const RESULTS = ['black_win', 'red_win'];
+    const RESULTS = ['black_win', 'red_win', null];
     const RESULT_TITLES = [
         null => '-',
         'black_win' => 'Победа мафии',
@@ -30,9 +30,15 @@ class Game extends Model
      * @var array
      */
     protected $fillable = [
+        'leader_id',
+        'best_red_id',
+        'best_black_id',
+
         'date',
-        'nickname',
-        'birthday',
+        'tournament_id',
+
+        'result',
+        'description',
     ];
 
     protected $casts = [
@@ -69,8 +75,17 @@ class Game extends Model
         return $query->whereNull('result', $finished, $boolean);
     }
 
-    public function scopeResult(Builder $query, string $result, string $boolean = 'and'){
+    public function scopeResult($query, string $result, string $boolean = 'and'){
         return $query->where('result', 'like', $result, $boolean);
+    }
+
+    public function scopeForList($query){
+        return $query
+            ->with([
+                'tournament' => fn($q) => $q->select(['id', 'name']),
+                'leader' => fn($q) => $q->select(['id', 'nickname', 'name']),
+            ])
+            ->select([$this->table . '.id', 'tournament_id', 'leader_id', 'result', 'date']);
     }
 
     // Relations

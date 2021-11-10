@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Orchid\Platform\Models\User as Authenticatable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'password',
         'permissions',
         'api_token',
+        'player_id',
     ];
 
     /**
@@ -70,11 +72,18 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    public static function makeToken(){
+    public function player(): BelongsTo
+    {
+        return $this->belongsTo(Player::class, 'player_id', 'id');
+    }
+
+    public static function makeToken(): string
+    {
         return Str::random(80);
     }
 
-    public function genToken($save = false){
+    public function genToken($save = false): void
+    {
         $this->api_token = static::makeToken();
         if($save)
             $this->save();
@@ -87,9 +96,9 @@ class User extends Authenticatable
      *
      * @throws Throwable
      */
-    public static function createAdmin(string $name, string $email, string $password)
+    public static function createAdmin(string $name, string $email, string $password): void
     {
-        throw_if(static::where('email', $email)->exists(), 'User exist');
+        throw_if(static::query()->where('email', $email)->exists(), 'User exist');
 
         static::create([
             'name'          => $name,
@@ -100,7 +109,8 @@ class User extends Authenticatable
         ]);
     }
 
-    public function getHasTokenAttribute(){
+    public function getHasTokenAttribute(): bool
+    {
         return !empty($this->api_token);
     }
 

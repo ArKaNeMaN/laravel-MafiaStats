@@ -5,7 +5,6 @@ namespace App\Orchid\Screens\Players;
 use App\Models\Player;
 use App\Orchid\Layouts\Players\PlayerGamesLayout;
 use App\Orchid\Layouts\Players\PlayerLeadGamesLayout;
-use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;
@@ -35,6 +34,16 @@ class PlayerViewScreen extends Screen
 
         return [
             'player' => $this->player,
+
+            'player.games' => $this->player
+                ->games()
+                ->forList()
+                ->get(),
+
+            'player.leadingGames' => $this->player
+                ->leadingGames()
+                ->forList()
+                ->get(),
         ];
     }
 

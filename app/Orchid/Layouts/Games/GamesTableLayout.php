@@ -39,7 +39,7 @@ class GamesTableLayout extends Table
 
             TD::make('leader', 'Ведущий')
                 ->render(function(Game $game) {
-                    return $game->leader->nickname;
+                    return $game->leader?->nickname;
                 }),
 
             TD::make('tournament', 'Турнир')

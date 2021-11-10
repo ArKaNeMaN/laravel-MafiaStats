@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Database\Query\Builder;
-
 class SearchRequest extends PaginationRequest
 {
     public function doSearch($q, array $searchParams){

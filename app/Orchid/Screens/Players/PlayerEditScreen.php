@@ -52,27 +52,25 @@ class PlayerEditScreen extends Screen
     public function create(PlayerRequest $req){
         $player = Player::create($req->getData());
 
-        Toast::success("Игрок '{$player->nickname}' создан.");
+        Toast::success("Игрок '$player->nickname' создан.");
 
         return redirect()->route('app.mafia.players.edit', $player);
     }
 
     public function save(Player $player, PlayerRequest $req){
-        $player
-            ->fill($req->getData())
-            ->save();
+        $player->updateOrFail($req->getData());
 
-        Toast::info("Игрок '{$player->nickname}' изменён.");
+        Toast::info("Игрок '$player->nickname' изменён.");
 
         return back();
     }
 
     public function delete(Player $player){
         $name = $player->nickname;
-        $player->delete();
+        $player->deleteOrFail();
 
-        Toast::info("Игрок '{$name}' удалён.");
+        Toast::info("Игрок '$name' удалён.");
 
-        return redirect()->route('app.mafia.players');
+        return redirect()->route('app.mafia.players.list');
     }
 }

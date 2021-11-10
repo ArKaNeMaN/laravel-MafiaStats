@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Game;
 use App\Models\Player;
+use App\Orchid\Screens\Games\GameEditScreen;
 use App\Orchid\Screens\Games\GamesListScreen;
 use App\Orchid\Screens\Games\GameViewScreen;
 use App\Orchid\Screens\PlatformScreen;
@@ -17,17 +18,6 @@ use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
-
-/*
-|--------------------------------------------------------------------------
-| Dashboard Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the need "dashboard" middleware group. Now create something great!
-|
-*/
 
 // Main
 Route::screen('/main', PlatformScreen::class)
@@ -102,64 +92,77 @@ Route::screen('roles', RoleListScreen::class)
 
 // Mafia
 
-Route::group(['prefix' => 'mafia'], function() {
+Route::group(['prefix' => 'mafia', 'as' => 'app.mafia.'], function () {
 
     // Players
-    Route::screen('players/{player}/edit', PlayerEditScreen::class)
-        ->name('app.mafia.players.edit')
-        ->breadcrumbs(function (Trail $trail, Player $player) {
-            return $trail
-                ->parent('app.mafia.players.view', $player)
-                ->push('Редактирование', route('app.mafia.players.edit', $player));
-        });
+    Route::group(['prefix' => 'players', 'as' => 'players.'], function () {
+        Route::screen('{player}/edit', PlayerEditScreen::class)
+            ->name('edit')
+            ->breadcrumbs(function (Trail $trail, Player $player) {
+                return $trail
+                    ->parent('app.mafia.players.view', $player)
+                    ->push('Редактирование', route('app.mafia.players.edit', $player));
+            });
 
-    Route::screen('players/{player}', PlayerViewScreen::class)
-        ->name('app.mafia.players.view')
-        ->breadcrumbs(function (Trail $trail, Player $player) {
-            return $trail
-                ->parent('app.mafia.players')
-                ->push($player->nickname, route('app.mafia.players.view', $player));
-        });
+        Route::screen('{player}', PlayerViewScreen::class)
+            ->name('view')
+            ->breadcrumbs(function (Trail $trail, Player $player) {
+                return $trail
+                    ->parent('app.mafia.players.list')
+                    ->push($player->nickname, route('app.mafia.players.view', $player));
+            });
 
-    Route::screen('players/create', PlayerEditScreen::class)
-        ->name('app.mafia.players.create')
-        ->breadcrumbs(function (Trail $trail) {
-            return $trail
-                ->parent('app.mafia.players')
-                ->push('Создание', route('app.mafia.players.create'));
-        });
+        Route::screen('create', PlayerEditScreen::class)
+            ->name('create')
+            ->breadcrumbs(function (Trail $trail) {
+                return $trail
+                    ->parent('app.mafia.players.list')
+                    ->push('Создание', route('app.mafia.players.create'));
+            });
 
-    Route::screen('players', PlayersListScreen::class)
-        ->name('app.mafia.players')
-        ->breadcrumbs(function (Trail $trail) {
-            return $trail
-                ->parent('platform.main')
-                ->push('Игроки', route('app.mafia.players'));
-        });
+        Route::screen('/', PlayersListScreen::class)
+            ->name('list')
+            ->breadcrumbs(function (Trail $trail) {
+                return $trail
+                    ->parent('platform.main')
+                    ->push('Игроки', route('app.mafia.players.list'));
+            });
+    });
 
     // Games
+    Route::group(['prefix' => 'games', 'as' => 'games.'], function () {
+        Route::screen('{game}/edit', GameEditScreen::class)
+            ->name('edit')
+            ->breadcrumbs(function (Trail $trail, Game $game) {
+                return $trail
+                    ->parent('app.mafia.games.view', $game)
+                    ->push("Редактирование", route('app.mafia.games.edit', $game));
+            });
 
-    Route::screen('games/{game}/edit', GameViewScreen::class)
-        ->name('app.mafia.games.edit')
-        ->breadcrumbs(function (Trail $trail, Game $game) {
-            return $trail
-                ->parent('app.mafia.games.view', $game)
-                ->push("Редактирование", route('app.mafia.games.edit', $game));
-        });
+        Route::screen('{game}', GameViewScreen::class)
+            ->name('view')
+            ->breadcrumbs(function (Trail $trail, Game $game) {
+                return $trail
+                    ->parent('app.mafia.games.list')
+                    ->push("#$game->id", route('app.mafia.games.view', $game));
+            });
 
-    Route::screen('games/{game}', GameViewScreen::class)
-        ->name('app.mafia.games.view')
-        ->breadcrumbs(function (Trail $trail, Game $game) {
-            return $trail
-                ->parent('app.mafia.games')
-                ->push("#{$game->id}", route('app.mafia.games.view', $game));
-        });
+        Route::screen('create', GameEditScreen::class)
+            ->name('create')
+            ->breadcrumbs(function (Trail $trail) {
+                return $trail
+                    ->parent('app.mafia.games.list')
+                    ->push("Создание игры", route('app.mafia.games.create'));
+            });
 
-    Route::screen('games', GamesListScreen::class)
-        ->name('app.mafia.games')
-        ->breadcrumbs(function (Trail $trail) {
-            return $trail
-                ->parent('platform.main')
-                ->push('Игры', route('app.mafia.games'));
-        });
+        Route::screen('/', GamesListScreen::class)
+            ->name('list')
+            ->breadcrumbs(function (Trail $trail) {
+                return $trail
+                    ->parent('platform.main')
+                    ->push('Игры', route('app.mafia.games.list'));
+            });
+    });
+
+    // Games
 });

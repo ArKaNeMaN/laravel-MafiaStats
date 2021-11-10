@@ -40,7 +40,9 @@ class PlayersController extends Controller
     }
 
     public function getGames(Player $pl){
-        return $pl->games;
+        return $pl->games()
+            ->forList()
+            ->get();
     }
 
     public function getGPlayers(PaginationRequest $req, Player $pl){
@@ -53,30 +55,16 @@ class PlayersController extends Controller
     }
 
     public function create(PlayerRequest $req){
-        $this->middleware('auth:api');
-        $this->middleware('role:admin');
-
-        $pl = new Player($req->getData());
-        $pl->save();
-
-        return $pl;
+        return Player::create($req->getData());
     }
 
     public function update(PlayerRequest $req, Player $pl){
-        $this->middleware('auth:api');
-        $this->middleware('role:admin');
-
-        $pl->fill($req->getData())->save();
-
+        $pl->updateOrFail($req->getData());
         return $pl;
     }
 
     public function delete(Player $pl){
-        $this->middleware('auth:api');
-        $this->middleware('role:admin');
-
         $pl->deleteOrFail();
-
         return null;
     }
 }

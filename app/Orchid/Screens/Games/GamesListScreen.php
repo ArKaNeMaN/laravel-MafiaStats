@@ -4,6 +4,8 @@ namespace App\Orchid\Screens\Games;
 
 use App\Models\Game;
 use App\Orchid\Layouts\Games\GamesTableLayout;
+use Orchid\Screen\Action;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 
 class GamesListScreen extends Screen
@@ -23,24 +25,30 @@ class GamesListScreen extends Screen
     public function query(): array
     {
         return [
-            'games' => Game::all(),
+            'games' => Game::query()
+                ->forList()
+                ->paginate(),
         ];
     }
 
     /**
      * Button commands.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return Action[]
      */
     public function commandBar(): array
     {
-        return [];
+        return [
+            Button::make('Создать')
+                ->action(route('app.mafia.games.create'))
+                ->icon('plus'),
+        ];
     }
 
     /**
      * Views.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array
      */
     public function layout(): array
     {

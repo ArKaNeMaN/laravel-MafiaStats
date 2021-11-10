@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use App\Models\Player;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Layouts\Rows;
 
 class UserEditLayout extends Rows
@@ -30,6 +32,11 @@ class UserEditLayout extends Rows
                 ->required()
                 ->title('E-Mail')
                 ->placeholder('E-Mail'),
+
+            Relation::make('user.player_id')
+                ->fromModel(Player::class, 'nickname', 'id')
+                ->title('Привязанный игрок')
+                ->placeholder('Привязанный к пользователю игрок'),
         ];
     }
 }

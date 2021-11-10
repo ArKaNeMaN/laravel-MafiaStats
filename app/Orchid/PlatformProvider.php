@@ -31,13 +31,13 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make('Игроки')
                 ->icon('user')
-                ->route('app.mafia.players')
+                ->route('app.mafia.players.list')
                 ->permission('app.mafia.players')
                 ->title('Мафия'),
 
             Menu::make('Игры')
                 ->icon('game-controller')
-                ->route('app.mafia.games')
+                ->route('app.mafia.games.list')
                 ->permission('app.mafia.games'),
 
             // Системные
