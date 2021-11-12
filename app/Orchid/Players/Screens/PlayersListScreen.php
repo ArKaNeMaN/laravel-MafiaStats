@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Orchid\Screens\Players;
+namespace App\Orchid\Players\Screens;
 
 use App\Models\Player;
-use App\Orchid\Layouts\Players\PlayersTableLayout;
+use App\Orchid\Players\Layouts\PlayersTableLayout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 

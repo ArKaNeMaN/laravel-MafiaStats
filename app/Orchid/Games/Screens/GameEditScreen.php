@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Orchid\Screens\Games;
+namespace App\Orchid\Games\Screens;
 
 use App\Http\Requests\GameRequest;
 use App\Models\Game;
-use App\Orchid\Layouts\Games\GameEditLayout;
+use App\Orchid\Games\Layouts\GameEditLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;

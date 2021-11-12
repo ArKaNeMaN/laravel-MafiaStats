@@ -40,6 +40,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('app.mafia.games.list')
                 ->permission('app.mafia.games'),
 
+            Menu::make('Турниры')
+                ->icon('game-controller')
+                ->route('app.mafia.tournaments.list')
+                ->permission('app.mafia.tournaments'),
+
             // Системные
 
             Menu::make('Пользователи')
@@ -79,7 +84,8 @@ class PlatformProvider extends OrchidServiceProvider
 
             ItemPermission::group('Мафия')
                 ->addPermission('app.mafia.players', 'Управление игроками')
-                ->addPermission('app.mafia.games', 'Управление играми'),
+                ->addPermission('app.mafia.games', 'Управление играми')
+                ->addPermission('app.mafia.tournaments', 'Управление турнирами'),
         ];
     }
 }

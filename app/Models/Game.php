@@ -53,8 +53,6 @@ class Game extends Model
     protected array $allowedFilters = [
         'id',
         'date',
-        'nickname',
-        'birthday',
         'created_at',
     ];
 
@@ -64,8 +62,8 @@ class Game extends Model
     protected array $allowedSorts = [
         'id',
         'name',
+        'leader',
         'tournament',
-        'birthday',
         'created_at',
     ];
 

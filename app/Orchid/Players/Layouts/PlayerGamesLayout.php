@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Orchid\Layouts\Players;
+namespace App\Orchid\Players\Layouts;
 
-use App\Orchid\Layouts\Games\GamesTableLayout;
+use App\Orchid\Games\Layouts\GamesTableLayout;
 
 class PlayerGamesLayout extends GamesTableLayout
 {

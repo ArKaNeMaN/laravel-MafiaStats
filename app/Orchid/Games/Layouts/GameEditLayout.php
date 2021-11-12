@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Layouts\Games;
+namespace App\Orchid\Games\Layouts;
 
 use App\Models\Game;
 use App\Models\Player;

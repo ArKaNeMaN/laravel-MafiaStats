@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Orchid\Screens\Players;
+namespace App\Orchid\Players\Screens;
 
 use App\Models\Player;
-use App\Orchid\Layouts\Players\PlayerGamesLayout;
-use App\Orchid\Layouts\Players\PlayerLeadGamesLayout;
+use App\Orchid\Players\Layouts\PlayerGamesLayout;
+use App\Orchid\Players\Layouts\PlayerLeadGamesLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;

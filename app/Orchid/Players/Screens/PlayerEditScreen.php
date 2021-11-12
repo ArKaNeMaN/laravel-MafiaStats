@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Orchid\Screens\Players;
+namespace App\Orchid\Players\Screens;
 
 use App\Http\Requests\PlayerRequest;
 use App\Models\Player;
-use App\Orchid\Layouts\Players\PlayerEditLayout;
+use App\Orchid\Players\Layouts\PlayerEditLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;

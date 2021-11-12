@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Orchid\Screens\Games;
+namespace App\Orchid\Games\Screens;
 
 use App\Models\Game;
-use App\Orchid\Layouts\Games\GamesTableLayout;
+use App\Orchid\Games\Layouts\GamesTableLayout;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -27,6 +27,8 @@ class GamesListScreen extends Screen
         return [
             'games' => Game::query()
                 ->forList()
+                ->defaultSort('id', 'desc')
+                ->filters()
                 ->paginate(),
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Layouts\Players;
+namespace App\Orchid\Players\Layouts;
 
 use App\Models\Player;
 use Illuminate\Support\Facades\Date;

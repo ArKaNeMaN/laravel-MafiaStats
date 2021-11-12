@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Layouts\Players;
+namespace App\Orchid\Players\Layouts;
 
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
