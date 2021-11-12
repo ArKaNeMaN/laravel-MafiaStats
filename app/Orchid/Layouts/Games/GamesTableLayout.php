@@ -28,23 +28,37 @@ class GamesTableLayout extends Table
     protected function columns(): array
     {
         return [
-            TD::make('id', '№'),
+            TD::make('id', '№')
+                ->sort()
+                ->filter(TD::FILTER_NUMERIC)
+                ->cantHide(),
 
             TD::make('date', 'Дата')
                 ->sort()
                 ->filter(TD::FILTER_DATE)
+                ->cantHide()
                 ->render(function(Game $game) {
                     return $game->date->toFormattedDateString();
                 }),
 
             TD::make('leader', 'Ведущий')
                 ->render(function(Game $game) {
-                    return $game->leader?->nickname;
+                    return is_null($game->leader)
+                        ? '-'
+                        : Link::make($game->leader->nickname)
+                            ->icon('link')
+                            ->href(route('app.mafia.players.view', $game->leader));
                 }),
 
             TD::make('tournament', 'Турнир')
                 ->render(function(Game $game) {
-                    return $game->tournament?->title ?? '-';
+                    return $game->tournament?->name ?? '-';
+
+//                    return is_null($game->tournament)
+//                        ? '-'
+//                        : Link::make($game->tournament->name)
+//                            ->icon('link')
+//                            ->href(route('app.mafia.tournaments.view', $game->tournament));
                 }),
 
             TD::make('result', 'Результат')

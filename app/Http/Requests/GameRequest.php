@@ -18,7 +18,7 @@ class GameRequest extends FormRequest
     {
         if(
             !$this->has('game.leader_id')
-            && is_null($this->user()?->player())
+            && is_null($this->user()?->player_id)
         ) return false;
 
         return true;
@@ -32,6 +32,8 @@ class GameRequest extends FormRequest
     public function rules()
     {
         return [
+            'game' => ['required', 'array'],
+
             'game.leader_id' => ['nullable', 'exists:players,id'],
             'game.best_red_id' => ['nullable', 'exists:players,id'],
             'game.best_black_id' => ['nullable', 'exists:players,id'],
@@ -48,8 +50,10 @@ class GameRequest extends FormRequest
     {
         $data = parent::validated();
 
-        $data['date'] = $data['date'] ?? Carbon::now();
-        $data['leader_id'] = $data['leader_id'] ?? $this->user()->player()->id;
+        $data['game']['date'] = $data['game']['date'] ?? Carbon::now();
+        $data['game']['leader_id'] = $data['game']['leader_id'] ?? $this->user()->player_id;
+        $data['game']['best_red_id'] = $data['game']['best_red_id'] ?? null;
+        $data['game']['best_black_id'] = $data['game']['best_black_id'] ?? null;
 
         return $data;
     }

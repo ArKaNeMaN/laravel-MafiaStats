@@ -2,11 +2,13 @@
 
 namespace App\Orchid\Screens\Games;
 
+use App\Http\Requests\GameRequest;
 use App\Models\Game;
 use App\Orchid\Layouts\Games\GameEditLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
 
 class GameEditScreen extends Screen
 {
@@ -45,5 +47,29 @@ class GameEditScreen extends Screen
         return [
             GameEditLayout::class,
         ];
+    }
+
+    public function create(GameRequest $req){
+        $g = Game::create($req->getData());
+
+        Toast::success("Игра создана.");
+
+        return redirect()->route('app.mafia.games.edit', $g);
+    }
+
+    public function save(Game $g, GameRequest $req){
+        $g->updateOrFail($req->getData());
+
+        Toast::info("Игра изменена.");
+
+        return back();
+    }
+
+    public function delete(Game $g){
+        $g->deleteOrFail();
+
+        Toast::info("Игра удалена.");
+
+        return redirect()->route('app.mafia.games.list');
     }
 }
