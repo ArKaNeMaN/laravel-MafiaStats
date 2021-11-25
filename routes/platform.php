@@ -17,7 +17,9 @@ use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Tournaments\Screens\TournamentEditScreen;
 use App\Orchid\Tournaments\Screens\TournamentsListScreen;
+use App\Orchid\Tournaments\Screens\TournamentViewScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
@@ -106,7 +108,7 @@ Route::group(['prefix' => 'mafia', 'as' => 'app.mafia.'], function () {
                     ->push('Редактирование', route('app.mafia.players.edit', $player));
             });
 
-        Route::screen('{player}', PlayerViewScreen::class)
+        Route::screen('{player}/view', PlayerViewScreen::class)
             ->name('view')
             ->breadcrumbs(function (Trail $trail, Player $player) {
                 return $trail
@@ -141,7 +143,7 @@ Route::group(['prefix' => 'mafia', 'as' => 'app.mafia.'], function () {
                     ->push("Редактирование", route('app.mafia.games.edit', $game));
             });
 
-        Route::screen('{game}', GameViewScreen::class)
+        Route::screen('{game}/view', GameViewScreen::class)
             ->name('view')
             ->breadcrumbs(function (Trail $trail, Game $game) {
                 return $trail
@@ -168,29 +170,29 @@ Route::group(['prefix' => 'mafia', 'as' => 'app.mafia.'], function () {
 
     // Tournaments
     Route::group(['prefix' => 'tournaments', 'as' => 'tournaments.'], function () {
-//        Route::screen('{tournament}/edit', GameEditScreen::class)
-//            ->name('edit')
-//            ->breadcrumbs(function (Trail $trail, Tournament $tour) {
-//                return $trail
-//                    ->parent('app.mafia.tournaments.view', $tour)
-//                    ->push("Редактирование", route('app.mafia.tournaments.edit', $tour));
-//            });
+        Route::screen('{tour}/edit', TournamentEditScreen::class)
+            ->name('edit')
+            ->breadcrumbs(function (Trail $trail, Tournament $tour) {
+                return $trail
+                    ->parent('app.mafia.tournaments.view', $tour)
+                    ->push("Редактирование", route('app.mafia.tournaments.edit', $tour));
+            });
 
-//        Route::screen('{tournament}', GameViewScreen::class)
-//            ->name('view')
-//            ->breadcrumbs(function (Trail $trail, Tournament $tour) {
-//                return $trail
-//                    ->parent('app.mafia.tournaments.list')
-//                    ->push("#$tour->id", route('app.mafia.tournaments.view', $tour));
-//            });
+        Route::screen('{tour}/view', TournamentViewScreen::class)
+            ->name('view')
+            ->breadcrumbs(function (Trail $trail, Tournament $tour) {
+                return $trail
+                    ->parent('app.mafia.tournaments.list')
+                    ->push("#$tour->id", route('app.mafia.tournaments.view', $tour));
+            });
 
-//        Route::screen('create', GameEditScreen::class)
-//            ->name('create')
-//            ->breadcrumbs(function (Trail $trail) {
-//                return $trail
-//                    ->parent('app.mafia.tournaments.list')
-//                    ->push("Создание", route('app.mafia.tournaments.create'));
-//            });
+        Route::screen('create', TournamentEditScreen::class)
+            ->name('create')
+            ->breadcrumbs(function (Trail $trail) {
+                return $trail
+                    ->parent('app.mafia.tournaments.list')
+                    ->push("Создание", route('app.mafia.tournaments.create'));
+            });
 
         Route::screen('/', TournamentsListScreen::class)
             ->name('list')

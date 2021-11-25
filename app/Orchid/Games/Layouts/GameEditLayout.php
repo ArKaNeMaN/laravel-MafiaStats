@@ -7,6 +7,7 @@ use App\Models\Player;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class GameEditLayout extends Rows
@@ -39,6 +40,9 @@ class GameEditLayout extends Rows
             Select::make('game.result')
                 ->title('Результат игры')
                 ->options(Game::RESULT_TITLES),
+
+            TextArea::make('game.description')
+                ->title('Примечания к игре'),
         ];
     }
 }

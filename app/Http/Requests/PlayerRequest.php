@@ -24,8 +24,10 @@ class PlayerRequest extends FormRequest
     public function rules()
     {
         return [
-            'player.name' => ['string', 'required', 'max:64'],
-            'player.nickname' => ['string', 'required', 'max:64'],
+            'player' => ['required', 'array'],
+
+            'player.name' => ['required', 'string', 'max:64'],
+            'player.nickname' => ['required', 'string', 'max:64'],
             'player.birthday' => ['nullable', 'date'],
         ];
     }

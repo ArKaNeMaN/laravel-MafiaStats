@@ -63,6 +63,17 @@ class GameViewScreen extends Screen
             Layout::legend('game', [
                 Sight::make('date', 'Дата проведения')
                     ->render(function(Game $game) { return $game->date->toFormattedDateString(); }),
+
+                Sight::make('tour_nickname', 'Турнир')
+                    ->render(function(Game $game) {
+                        return is_null($game->tournament)
+                            ? '-'
+                            : Link::make($game->tournament->name)
+                                ->icon('link')
+                                ->href(route('app.mafia.tournaments.view', $game->tournament))
+                                ->render()->render();
+                    }),
+
                 Sight::make('description', 'Описание'),
 
                 Sight::make('leader_nickname', 'Ведущий')

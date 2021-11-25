@@ -52,13 +52,11 @@ class GamesTableLayout extends Table
 
             TD::make('tournament', 'Турнир')
                 ->render(function(Game $game) {
-                    return $game->tournament?->name ?? '-';
-
-//                    return is_null($game->tournament)
-//                        ? '-'
-//                        : Link::make($game->tournament->name)
-//                            ->icon('link')
-//                            ->href(route('app.mafia.tournaments.view', $game->tournament));
+                    return is_null($game->tournament)
+                        ? '-'
+                        : Link::make($game->tournament->name)
+                            ->icon('link')
+                            ->href(route('app.mafia.tournaments.view', $game->tournament));
                 }),
 
             TD::make('result', 'Результат')

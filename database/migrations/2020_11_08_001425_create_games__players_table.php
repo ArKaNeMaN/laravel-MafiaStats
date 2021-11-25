@@ -17,13 +17,18 @@ class CreateGamesPlayersTable extends Migration
             $table->id();
 
             $table->foreignId('game_id')
-                ->constrained('games')->cascadeOnDelete();
+                ->constrained('games')
+                ->cascadeOnDelete();
 
-            $table->foreignId('player_id')->nullable()
-                ->constrained('players')->onDelete('SET NULL');
+            $table->foreignId('player_id')
+                ->nullable()
+                ->constrained('players')
+                ->onDelete('SET NULL');
 
-            $table->foreignId('helper_id')->nullable()
-                ->constrained('players')->onDelete('SET NULL');
+            $table->foreignId('helper_id')
+                ->nullable()
+                ->constrained('players')
+                ->onDelete('SET NULL');
 
             $table->integer('ingame_player_id')
                 ->default(0);

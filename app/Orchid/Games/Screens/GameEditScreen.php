@@ -12,7 +12,7 @@ use Orchid\Support\Facades\Toast;
 
 class GameEditScreen extends Screen
 {
-    public $permission = 'app.mafia.players';
+    public $permission = 'app.mafia.games';
 
     protected Game $game;
 
@@ -20,8 +20,8 @@ class GameEditScreen extends Screen
     {
         $this->game = $g;
         $this->name = $this->game->exists
-            ? 'Создание игры'
-            : 'Редактирование игры ';
+            ? "Редактирование игры #{$this->game->id}"
+            : 'Создание игры';
 
         return ['game' => $this->game];
     }
