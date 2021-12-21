@@ -12,7 +12,8 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "orchid/crud": "^3.1",
-        "orchid/platform": "^10.19"
+        "orchid/platform": "^10.19",
+        "ext-http": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

@@ -85,6 +85,7 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group('Мафия')
                 ->addPermission('app.mafia.players', 'Управление игроками')
                 ->addPermission('app.mafia.games', 'Управление играми')
+                ->addPermission('app.mafia.games.delete', 'Удаление игр')
                 ->addPermission('app.mafia.tournaments', 'Управление турнирами'),
         ];
     }

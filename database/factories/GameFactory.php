@@ -50,13 +50,27 @@ class GameFactory extends Factory
             // Create players
             $players = Player::where('id', '!=', $game->leader_id)->inRandomOrder()->limit(10)->get();
             $roles = $this->faker->shuffle(['black', 'black', 'don', 'sheriff', 'red', 'red', 'red', 'red', 'red', 'red']);
+
+            $gPlayers = collect();
             for($i = 1; $i <= 10; $i++)
-                GamePlayer::factory()->state([
-                    'game_id' => $game->id,
-                    'player_id' => $players[$i-1]->id,
-                    'role' => $roles[$i-1],
-                    'ingame_player_id' => $i,
-                ])->create();
+                $gPlayers->push(
+                    GamePlayer::factory()->state([
+                        'game_id' => $game->id,
+                        'player_id' => $players[$i-1]->id,
+                        'role' => $roles[$i-1],
+                        'ingame_player_id' => $i,
+                    ])->create()
+                );
+
+            $game->best_black_id = $gPlayers
+                ->whereIn('role', ['black', 'don'])
+                ->random()->player_id;
+
+            $game->best_red_id = $gPlayers
+                ->whereIn('role', ['red', 'sheriff'])
+                ->random()->player_id;
+
+            $game->save();
 
             // Create nights
             $players = GamePlayer::where('game_id', $game->id)->inRandomOrder()->get();
