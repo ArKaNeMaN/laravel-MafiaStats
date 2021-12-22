@@ -16,11 +16,6 @@ class GameRequest extends FormRequest
      */
     public function authorize()
     {
-        if(
-            !$this->has('game.leader_id')
-            && is_null($this->user()?->player_id)
-        ) return false;
-
         return true;
     }
 
@@ -32,7 +27,7 @@ class GameRequest extends FormRequest
     public function rules()
     {
         return [
-            'game' => ['required', 'array'],
+            'game' => ['nullable', 'array'],
 
             'game.leader_id' => ['nullable', 'exists:players,id'],
             'game.best_red_id' => ['nullable', 'exists:players,id'],

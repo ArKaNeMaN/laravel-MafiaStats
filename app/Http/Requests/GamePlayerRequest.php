@@ -22,7 +22,7 @@ class GamePlayerRequest extends FormRequest
             'gamePlayer.game_id' => ['required', 'numeric', 'exists:games,id'],
             'gamePlayer.role' => ['required', 'string', Rule::in(GamePlayer::ROLES)],
             'gamePlayer.score' => ['nullable', 'numeric'],
-            'gamePlayer.ingame_player_id' => ['nullable', 'numeric'],
+            'gamePlayer.ingame_player_id' => ['required', 'numeric'],
         ];
     }
 
