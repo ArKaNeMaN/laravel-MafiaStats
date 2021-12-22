@@ -25,6 +25,16 @@ class GamePlayer extends Model
      */
     protected $table = 'games__players';
 
+    protected $fillable = [
+        'role',
+        'player_id',
+        'game_id',
+        'is_removed',
+        'fouls',
+        'score',
+        'ingame_player_id',
+    ];
+
     /**
      * The attributes that aren't mass assignable.
      *
