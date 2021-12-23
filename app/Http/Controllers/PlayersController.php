@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CalculatePlayerWinRateAction;
 use App\Http\Requests\PaginationRequest;
 use App\Http\Requests\PlayerRequest;
 use App\Http\Requests\SearchRequest;
@@ -66,5 +67,9 @@ class PlayersController extends Controller
     public function delete(Player $pl){
         $pl->deleteOrFail();
         return null;
+    }
+
+    public function winRate(Player $player, CalculatePlayerWinRateAction $action){
+        return $action->execute($player);
     }
 }

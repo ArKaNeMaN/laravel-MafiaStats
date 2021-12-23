@@ -43,6 +43,7 @@ Route::group(['as' => 'players.', 'prefix' => 'players'], function() {
         Route::get('score/{period}', function (Player $player, string $period) {
             return app(CalculatePlayerScoreForPeriodAction::class)->execute($player, DateRange::parse($period));
         });
+        Route::get('winRate', [PlayersController::class, 'winRate']);
     });
 
     Route::middleware(['auth:api', 'perm:app.mafia.players'])->group(function () {
